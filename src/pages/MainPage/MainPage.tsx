@@ -41,16 +41,21 @@ const MainPage = () => {
 				const payloadBase64 = accessToken.split('.')[1];
 				const decodedPayload = JSON.parse(atob(payloadBase64));
 				const userId = decodedPayload.userId;
+				console.log(userId);
 
 				localStorage.setItem('userId', String(userId));
 			} catch (error) {
 				console.error('AccessToken 디코딩 실패', error);
 			}
-
-			localStorage.setItem('companyId', String(user?.companyId));
-			localStorage.setItem('teamId', String(user?.teamId));
 		}
-	}, [isLogin, accessToken, user]);
+	}, [isLogin, accessToken]);
+
+	useEffect(() => {
+		if (isLogin && user?.companyId && user?.teamId) {
+			localStorage.setItem('companyId', String(user.companyId));
+			localStorage.setItem('teamId', String(user.teamId));
+		}
+	}, [isLogin, user]);
 
 	if (isLogin) {
 		return (
